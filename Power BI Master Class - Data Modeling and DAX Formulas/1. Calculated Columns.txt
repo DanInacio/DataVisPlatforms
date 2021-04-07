@@ -1,0 +1,44 @@
+--------------------------------------------------------------------------------------------
+GET YEAR FROM DATE COLUMN
+Year = YEAR(Data[SalesDate])
+
+GET MONTH FROM DATE COLUMN
+Month = MONTH(Data[SalesDate])
+
+GET DAY FROM DATE COLUMN
+Day = DAY(Data[SalesDate])
+
+GET WEEK NUMBER FROM 1 TO 52
+Weeknum = WEEKNUM(Data[SalesDate],1)
+
+GET WEEK DAY FROM 1 TO 7
+Weekday = WEEKDAY(Data[SalesDate],1)
+
+FORMAT WEEKDAYS TO TEXT
+WeekdayName = FORMAT(Data[SalesDate],"DDDD")
+
+FORMAT MONTHS TO TEXT
+MonthName = FORMAT(Data[SalesDate],"MMMM")
+
+--------------------------------------------------------------------------------------------
+GET SALES FROM LIST PRICE AND ORDERS
+Sales = Data[ListPrice] * Data[OrderQty]
+
+--------------------------------------------------------------------------------------------
+GET COST FROM UNIT COST AND ORDERS
+Cost = Data[UnitPrice] * Data[OrderQty]
+
+--------------------------------------------------------------------------------------------
+PROFIT CALCULATION
+Profit = Data[Sales] - Data[Cost]
+
+--------------------------------------------------------------------------------------------
+IF CLAUSE
+Over1000 = IF(Data[Sales] > 1000,"Over 1000","Under 1000")
+
+--------------------------------------------------------------------------------------------
+SWITCH CLAUSE
+SalesGroup = SWITCH(TRUE(),Data[Sales]>2000,"Over 2000",
+                           Data[Sales]>1000,"1000 to 2000",
+                           Data[Sales]>500,"500 to 1000",
+                           "0 to 500")

@@ -1,0 +1,270 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX CALCULATED COLUMNS
+- Table/Column formula, for each row
+- Typically used to filter data
+
+E.g.: "Parent" column: "Yes", if [TotalChildren] > 0, otherwise "No"
+
+RULE OF THUMB: Used to "stamp" static values for each unique row.
+               NOT for aggregated formulas (sum, count, etc.)
+
+------
+1. Creating a "QuantityType" column in the Data Tab
+   a.) Right-Click > New Column
+   b.) In the DAX Pop-Up, type:
+       QuantityType = IF(OrderQuantity > 1, "Multiple Items", "Single Item")
+
+   c.) TotalQuantity = SUM(OrderQuantity) -> This will give the same value for all rows!!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX MEASURES
+- Table/Column formula, but NOT VISIBLE within tables, ONLY REPORTS!
+
+RULE OF THUMB: Used when a single row does not give you an answer (need to aggregate)
+               Create numerical values to analyse in the "Values" field in reports
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ADDING COLUMNS AND MEASURES
+- Report Tab > Modelling > "New Measure"/"New Column"
+- Data Tab > Right-Click Table/Column > "New Measure"/"New Column"
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+IMPLICIT VS EXPLICIT MEASURES
+- Implicit measures are created when dragging numerical fields
+into the "Values" pane of a graph and selecting the Aggregation mode
+
+- Explicit measures are created by actually entering DAX functions
+
+IMPLICIT: Only accessible within the visual in which it was created!
+EXPLICIT: Accessible anywhere in the Report Tab!
+
+------
+2. Create a DAX Measure for sum of Order Quantities
+   a.) Report Tab > Modelling > New Measure (while selecting the matrix)
+      i.) New measure ends up in the Calendar, which makes no sense!
+   DO NOT USE METHOD A!!!
+
+   b.) Report Tab > Right-Click on Sales table > New Measure
+      Quantity Sold = SUM(OrderQuantity)
+
+   c.) Drag the measure into the matrix "Values" pane
+   ORDERQUANTITY is implicit, within the visual.
+   QUANTITYSOLD can be used anywhere!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: DATE/TIME
+
+(Data Tab > Calendar Table)
+3. Right-Click > New Column
+   Day of Week = WEEKDAY(AdventureWorks_Calendar[Date].[Date],2)
+
+(Data Tab > Customer Table)
+4. Right-Click > New Column
+   BirthYear_CC = YEAR(AdventureWorks_Customers[BirthDate])
+OR
+   BirthYear_CC = AdventureWorks_Customers[BirthDate].[Ano]
+
+5. Right-Click > New Column
+   Current Age = DATEDIFF(AdventureWorks_Customers[BirthDate].[Date],TODAY(),YEAR)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: IF/AND/OR
+
+(Data Tab > Customer Table)
+6. Right-Click > New Column
+   Parent = IF(AdventureWorks_Customers[TotalChildren] > 0,"Yes","No")
+
+(Data Tab > Calendar Table)
+7. Right-Click > New Column
+   Weekend = IF(WEEKDAY(AdventureWorks_Calendar[Date].[Date],2)==6 ||
+                WEEKDAY(AdventureWorks_Calendar[Date].[Date],2)==7,
+                "Weekend", "Weekday")
+OR
+   Weekend = IF(OR(AdventureWorks_Calendar[Day of Week]==6,
+                   AdventureWorks_Calendar[Day of Week]==7),
+                "Weekend","Weekday")
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: TEXT
+
+(Data Tab > Customer Table)
+8. Right-Click > New Column
+   FullName_CC = AdventureWorks_Customers[Prefix] & " " &
+                 AdventureWorks_Customers[FirstName] & " " &
+                 AdventureWorks_Customers[LastName]
+
+(Data Tab > Calendar Table)
+9. Right-Click > New Column
+   ShortMonth = UPPER(LEFT(AdventureWorks_Calendar[MonthName],3))
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: RELATED (gets data from another table AS LONG AS a relationship exists!!!)
+
+(Data Tab > Sales Table)
+10. Right-Click > New Column
+    RetailPrice = RELATED(AdventureWorks_Products[ProductPrice])
+    Change to currency with 2 decimals...
+
+(Data Tab > Sales Table)
+11. Right-Click > New Column
+    Revenue = 'Sales CSV'[RetailPrice] * 'Sales CSV'[OrderQuantity]
+    Change to currency with 2 decimals...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: MATH/STATS
+
+(Report Tab > Returns Table > New Measure)
+12. QuantityReturned = SUM(AdventureWorks_Returns[ReturnQuantity])
+    Add to Matrix to view...
+
+(Report Tab > Sales Table > New Measure)
+13. TotalRevenue = SUM('Sales CSV'[Revenue])
+    Add to Matrix to view...
+    You can also format the measure in the Report View...
+
+(Report Tab > Sales Table > New Measure)
+14. ReturnRate = DIVIDE([QuantityReturned],[Quantity Sold],"No Sales")
+    Add to Matrix to view... Format as Percentage...
+
+Replace ProductKey with CategoryName in the rows for the matrix visual!
+
+(Report Tab > Product Table > New Measure)
+15. AvgPrice = AVERAGE(AdventureWorks_Products[ProductPrice])
+    Add to Matrix to view... Format the measure in the Report View...
+
+Notice the new product that shows up, even though it was not sold!!!
+
+Add Subcategory name and product name in the rows to add sub-levels to the matrix!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: COUNTA, DISTINCTCOUNT, COUNTROWS
+
+Some returns happened more than once. I want only each unique product returned!
+(Report Tab > Returns Table > New Measure)
+16. TotalReturns = COUNTROWS(AdventureWorks_Returns)
+    Add to Matrix to view...
+OR
+    TotalReturns = COUNT(AdventureWorks_Returns[ReturnQuantity])
+    ONLY because no null values exist on this table/columns!!!
+OR
+    TotalReturns = COUNTA(AdventureWorks_Returns[ReturnQuantity])
+    ONLY because no null values exist on this table/columns!!!
+
+I want to view not all my orders, but just the unique ones!
+(Report Tab > Sales Table > New Measure)
+17. TotalUniqueOrders = DISTINCTCOUNT('Sales CSV'[OrderNumber])
+    Add to Matrix to view...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: CALCULATE
+---------------------------------
+Important: Notice your current matrix's TotalOrders=25164, but should be over 30000!
+This happens because DISTINCTCOUNT() is showing distinct counts for each category
+(Accessories, Bikes, Clothing, etc.) AND the distinct count of its sum!!!
+---------------------------------
+
+Note: CALCULATE IF... is the logic behind this operation (expression + condition)
+
+I want to see my unique bulk orders...
+(Report Tab > Sales Table > New Measure)
+18. BulkOrders = CALCULATE([TotalUniqueOrders],'Sales CSV'[OrderQuantity]>1)
+
+I want to see the total returns for Bikes...
+(Report Tab > Returns Table > New Measure)
+19. BikeReturns = CALCULATE([TotalReturns],
+                            AdventureWorks_Product_Categories[CategoryName] = "Bikes")
+    Delete this measure...
+
+WARNING: CALCULATE overrides ANY filter!!! In a matrix with different categories, you
+are viewing the filter "Clothing" and then CALCULATE with filter Bike! It overrides!!!
+
+I want to view my weekend orders...
+(Report Tab > Calendar Table > New Measure)
+20. WeekendOrders = CALCULATE([TotalUniqueOrders],
+                              AdventureWorks_Calendar[Weekend] = "Weekend")
+
+View this matrix with CategoryName as rows and TotalUniqueOrders, WeekendOrders as Values!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: CALCULATE & ALL (ALL() returns all rows, ignoring any filters!)
+
+View All Orders...
+(Report Tab > Sales Table > New Measure)
+21. AllOrders = CALCULATE([TotalUniqueOrders],ALL('Sales CSV'))
+    If you view this in matrix, notice how all rows show the same value. Filter removed.
+
+View Order Ratio per Category...
+(Report Tab > Sales Table > New Measure)
+22. %OfAllOrders = [TotalUniqueOrders] / [AllOrders]
+    View in matrix...
+
+View average of all retail prices...
+(Report Tab > Product Table > New Measure)
+23. OverallAvgPrice = CALCULATE([AvgPrice],ALL(AdventureWorks_Products))
+    View in matrix... ALL() removes all filters...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: CALCULATE & FILTER (FILTER() returns a subset of table!)
+
+Total Orders only for products greater than the average price...
+(Report Tab > Sales Table > New Measure)
+24. HighTicketOrders = CALCULATE([TotalUniqueOrders],
+                                  AdventureWorks_Products[ProductPrice] > [OverallAvgPrice])
+
+ERROR: YOU CANNOT USE MEASURES IN FILTER PARAMETERS!!!
+
+24. HighTicketOrders = CALCULATE([TotalUniqueOrders],
+                                 FILTER(AdventureWorks_Products,
+                                        AdventureWorks_Products[ProductPrice] > 
+                                        [OverallAvgPrice]))
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: SUMX (operations per row and sum the results)
+
+View Matrix with CategoryName as rows and QuantitySold,TotalRevenue as Values!
+
+(Report Tab > Sales Table > New Measure)
+25. TotalRevenue_Measure = SUM('Sales CSV'[OrderQuantity]) *
+                           SUM(AdventureWorks_Products[ProductPrice])
+
+ERROR: Summing quantity and price and then multiplying is the wrong order of operations!
+
+You need to multiply for each row and sum the results!
+
+    TotalRevenue_Measure = SUMX('Sales CSV',
+                                'Sales CSV'[OrderQuantity] * 'Sales CSV'[RetailPrice])
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: TIME INTELLIGENCE FORMULAS
+
+Matrix rows should be StartOfMonth!
+
+View Year-To-Date Revenue...
+(Report Tab > Sales Table > New Measure)
+26. YTD_Revenue = CALCULATE([TotalRevenue],DATESYTD(AdventureWorks_Calendar[Date]))
+
+Also, format the matrix > Conditional Formatting > YTD_Revenue > Bar Charts > Active
+
+View Previous Month Revenue...
+(Report Tab > Sales Table > New Measure)
+27. PrevMonth_Revenue = CALCULATE([TotalRevenue],
+                                  DATEADD(AdventureWorks_Calendar[Date],-1,MONTH))
+
+View Target, which is PrevMonth + 10% Revenue...
+(Report Tab > Sales Table > New Measure)
+28. TargetRevenue = [PrevMonth_Revenue] *1.1
+
+10 Day Rolling Revenue...
+(Report Tab > Sales Table > New Measure)
+29. 10Day_RollingRevenue = CALCULATE([TotalRevenue],
+                                     DATESINPERIOD(AdventureWorks_Calendar[Date],
+                                                   MAX(AdventureWorks_Calendar[Date]),
+                                                   -10,DAY))
+
+Matrix rows as Date and values as TotalRevenue,10Day_RollingRevenue
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DAX: BEST PRACTICES
+- No calculated column if a measure does the same
+- Write measures for even the simplest calculations (can be used anywhere!)
+- Reference columns with table name and measures alone

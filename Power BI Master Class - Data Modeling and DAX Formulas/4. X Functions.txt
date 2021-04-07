@@ -1,0 +1,38 @@
+-------------------------------------------------------------------------------------------
+SUMX
+TotalSalesX = SUMX(Data,Data[ListPrice]*Data[OrderQty])
+
+-------------------------------------------------------------------------------------------
+AVERAGEX
+AvgSalesX = AVERAGEX(Data,Data[ListPrice]*Data[OrderQty])
+
+-------------------------------------------------------------------------------------------
+MAXX (Highest Day of Sales per Country, for example)
+HighestSalesPerDay = MAXX(VALUES(Data[SalesDate]),[TotalSales])
+
+-------------------------------------------------------------------------------------------
+RANKX
+CustomerRanking = RANKX(ALL(Data[Customer]),[TotalSales])
+CustomerRanking = RANKX(ALL(Data[Customer]),[TotalSales],,,Dense)
+CustomerRanking = RANKX(ALL(Data[Customer]),[TotalSales],,,Skip)
+ProfitRanking = RANKX(ALL(Data[Customer]),[TotalProfit],,,Skip)
+
+-------------------------------------------------------------------------------------------
+WHAT-IF PARAMETERS (New Parameter under Modelling in Report View!)
+
+Sales Parameter (from 5 to 100 in increments of 5, default 5)
+NewWHATIFSales = [TotalSales]*'Sales Parameter'[Sales Parameter Valor]
+
+WARNING -> THIS MULTIPLIES BY 15, NOT 15%
+
+NewWHATIFSales = [TotalSales]*(1+('Sales Parameter'[Sales Parameter Valor] / 100))
+
+-------------------------------------------------------------------------------------------
+CustomerSegment CANNOT BE A COLUMN, ONLY VALUES!
+This requires a new VIRTUAL TABLE!
+
+CustomerSegment = SWITCH(TRUE(),
+                         [TotalSales]>1000000,"GOLD",
+                         [TotalSales]>500000,"SILVER",
+                         "BRONZE")
+

@@ -1,0 +1,57 @@
+Create the Schema Project!
+-------------------------------------------------------------------------------------------
+STAR SCHEMAS
+Load Data File and Transform Data in the QueryEditor!
+
+- Rename table to Data
+- Right-click on the Data table and duplicate it. Rename to Country
+	Choose Columns: Region and Country
+	Remove Duplicates, by selecting both columns
+
+We want to replace, in the Data table, the Region and Country by using our new table
+We need a new table ID!
+
+- Go to Country Table > Add Column > Index Column > From 1
+	Rename to CountryID
+
+Go to Home > Merge Queries > Select Country on both tables
+In Country.1, select only the CountryID column!!!
+	Do not use the original column name as prefix...
+Delete the Region and Country columns
+
+CLOSE AND APPLY!
+RELATIONSHIP IS AUTOMATICALLY CREATED!
+
+-------------------------------------------------------------------------------------------
+DIRECTQUERY
+Get Data > Azure SQL DB
+	Server: trainingdata.database.windows.net
+	Connectivity: DirectQuery
+	Then select Database and input credentials
+
+-------------------------------------------------------------------------------------------
+QUICK MEASURES (Open the Data Project!!!)
+
+Sum per Category
+	Sum of Sales
+	Business Segment
+Average per Category
+	Average of Sales
+	Business Segment
+Max per Category
+	Sum of Sales
+	Business Segment
+OR
+QM_MaxSalesPerBusinessSegment = 
+MAXX(
+	KEEPFILTERS(VALUES('Data'[Business Segment])),
+	CALCULATE(SUM('Data'[Sales]))
+)
+
+YTDTotal
+	Sum of Sales
+	Master Date
+MonthOverMonthChange
+	Sum of Sales
+	Master Date
+	Number of periods = 1

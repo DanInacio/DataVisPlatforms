@@ -1,0 +1,189 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Load Data
+1. Load AdventureWorks_Products.csv
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Transform Data (Power Query Editor)
+2. Delete ProductSize Column
+3. Sort ProductKey Column in Ascending Order
+4. Close and Apply
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Go to Relationships and Load Data
+5. Load AdventureWorks_Customers.csv
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Text Tools (Power Query Editor)
+6. Select Column Prefix
+   a.) Go to Add Column > Format > Capitalize Each Word
+      WRONG METHOD
+   b.) Go to Transform > Format > Capitalize Each Word
+   c.) Same as b.) in First and Last Name Columns
+7. Merge both name columns into FullName as a New Column
+   a.) Go to Add Column > Merge Columns
+   b.) Right-click on this step and rename it for clarity
+8. Get username based on e-mail column
+   a.) Go to Add Column > Extract based on text before delimiter '@'
+   b.) Rename Column to username
+9. Get domain name based on e-mail column
+   a.) Go to Add Column > Extract text between delimiters '@' & '.com'
+   b.) Rename Column to domain
+   c.) Replace the '-' with a ' ' (Transform > Replace Values)
+   d.) Capitalize each word
+10. Close and Apply
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Number Tools (Power Query Editor)
+11. Some operations...
+   a.) Select ProductName column > Transform > Statistics > Distinct Value Count
+   b.) Select ProductPrice column > Transform > Statistics > Average
+   c.) Select ProductPrice and Product Cost columns > Transform > Round 2 decimals
+12. Create a DiscountPrice column
+   a.) Select ProductPrice column > Add Column > Pattern > Multiply 0.9
+   b.) Rename column to DiscountPrice
+   c.) Round the new column to 2 decimal places
+13. Close and Apply
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Date/Time Tools (Power Query Editor)
+14. Load AdventureWorks_Calendar.csv
+15. Some operations...
+   a.) Go to Transform > Date > Earliest
+   b.) Go to Transform > Date > Latest
+   c.) Go to Add Column > Date > Name of Day
+   d.) Go to Add Column > Date > Start of Week
+      i.) By default, beginning of the week is Sunday
+      ii.) To change, add in the MCode as shown below:
+
+-----------------------------------------
+= Table.AddColumn(#"Nome do Dia Inserido", "Início da Semana", 
+                  each Date.StartOfWeek([Date]), type date)
+BECOMES...
+= Table.AddColumn(#"Nome do Dia Inserido", "Início da Semana",
+                  each Date.StartOfWeek([Date],Day.Monday), type date)
+-----------------------------------------
+
+   e.) Go to Add Column > Date > Start of Month
+   f.) Go to Add Column > Date > Name of Month
+   g.) Go to Add Column > Date > Start of Year
+   h.) Go to Add Column > Date > Year
+16. Close and Apply
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+PRO TIP: CREATE A ROLLING CALENDAR
+17. Create it...
+   a.) Go to Get Data > Blank Query or New Source > Blank Query
+   b.) Generate a starting date by entering a "literal" (in YYYY,MM,DD)
+      i.) =#date(2020,1,1)
+   c.) Click the fX icon and enter the formula below:
+      i.) List.Dates(Source,Number.From(DateTime.LocalNow()) - Number.From(Source),
+                     #duration(1,0,0,0))
+   d.) Convert the list into a table (List Tools > To Table)
+   e.) Format as Date and Rename column as Date
+   f.) Add calculated Date columns for Year, Name of Month, Start of Week, Day
+18. Delete it. Not needed for this project!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Index Columns and Conditional Columns
+19. Load AdventureWorks_Sales_2017.csv
+20. Add Column > Index Column > Start at 1 > Move column to beginning
+21. Remove Index Column
+22. Add Column > Conditional Column
+   a.) Name is QuantityType
+   b.) If OrderQuantity=1, Output=Single Item,
+       Else If OrderQuantity>1, Output=Multiple Items
+       Else <Other>
+23. Remove Conditional Column
+24. Close and Apply
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Grouping and Aggregating Records
+25. Edit Sales_2017 data
+   a.) Group by ProductKey, New column=TotalQuantity, Operation=SUM(OrderQuantity)
+   b.) Group by (Advanced) ProductKey, CustomerKey
+       New column=TotalQuantity, Operation=SUM(OrderQuantity)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Pivoting (rows into columns) and Unpivoting (columns into rows) Data
+NOTE: Transpose is SIMILAR, but does NOT RECOGNISE UNIQUE VALUES!
+26. Load Unpivot_Demo.csv
+27. Use 1st Line as Headers
+28. Select all Columns > Transform > Unpivot Columns
+29. Select all Columns > Transform > Pivot Columns (select value column for values!)
+30. Delete it. Not needed for this project!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Merging Queries (Select 2 tables matching columns, i.e., adds columns of table2 to table1)
+31. Edit Sales_2017 data
+32. Go to Home > Merge Queries > Merge with Products table
+33. Select the new "table column" and choose which columns you want to merge
+   a.) ProductKey,ProductName,ProductColor
+34. Delete the Merge Actions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Appending Queries (adds rows of table2 to table1)
+35. Load AdventureWorks_Sales_2015.csv and AdventureWorks_Sales_2016.csv
+36. Go to Home > Append Queries > Append 2016 data to 2015 data
+37. Delete the Append Action
+38. Go to Home > Append Queries as New Table > Append all Sales tables
+39. Rename to AdventureWorks_Sales_2015-2017
+WARNING: YOU CANNOT DELETE THE ORIGINAL FILES SINCE THEY ARE REFERENCED!!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+PRO TIP: APPENDING FILES FROM A FOLDER
+Only do this if you know beforehand all files have the same column structure!
+As you add new files, they automatically append!
+
+40. Delete the Appended Table AdventureWorks_Sales_2015-2017 and all 3 Sales tables
+41. Move the Sales files to a new folder
+42. Get Data > Folder > Combine & Edit
+43. Remove the Source.Name column
+44. Press Refresh whenever a new file is added to the folder!!!
+45. Close and Apply
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Configuring Power BI Data Source Settings
+This is where you can browse to the new location of your files, if it changes!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Configuring Power BI Query Refresh Settings
+Refresh button refreshes everything by default!
+
+In the Query Editor, you can right-click your tables
+and choose to not include them in the Refresh.
+It is a good practice to not include tables which are never going to change!
+
+46. Right-click all your tables except Sales in the Query Editor and remove the Refresh
+47. Close and Apply
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Additional Data Types and Categories
+48. Go to the Data Tab on the left
+49. When you select a Date column, for example, formatting options show up!
+50. In the Calendar and Sales tables, change all date columns to DD/MM/YYYY Format
+51. In the Products table, you can also format the currency tables, to show currency
+
+52. Load AdventureWorks_Territories.csv
+53. In the Query Editor, Close and Apply
+54. In the Data tab, select "Data Category: Uncategorized"
+   a.) Set Country column as Country category
+   b.) Set Continent column as Continent category
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Defining Hierarchies (Data Tab)
+To allow "drill up/drill down" in charts!
+
+55. Right-click, in Data Tab, on the right side, where your tables are
+   a.) Select New Hierarchy: Territories Table > Continent
+   b.) Add to Hierarchy: Territories Table > Country, Region
+   c.) Rename your Hierarchy to "Territory Hierarchy"
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+PRO TIP: IMPORTING MODELS FROM EXCEL TO POWER BI
+56. Go to File > Import > Excel Workbook Contents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+BEST PRACTICES: DATA CONNECTION
+Define clear table names
+Establish a folder structure
+Disable report refresh for static sources

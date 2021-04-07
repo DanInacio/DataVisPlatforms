@@ -1,0 +1,101 @@
+HOMEWORK: Analyzing Data with DAX Calculations in Power BI
+Using the Adventure Works report, complete the following:
+
+--------------------------------------------------------------------------------------------
+1) In the DATA view, create the following calculated columns:
+
+- In the Customer table, add a new column named "Customer Priority" that equals "Priority"
+for customers who are under 50 years old and have an annual income of
+greater than $100,000 and "Standard" otherwise
+
+CustomerPriority = IF(AdventureWorks_Customers[Current Age] > 50 && 
+                      AdventureWorks_Customers[AnnualIncome]>100000, "Priority", "Standard")
+
+- In the Product table, add a new column named "Price Point", based on:
+   - If the product price is greater than $500, Price Point = "High"
+   - If the product price is between $100 and $500, Price Point = "Mid-Range"
+   - If the product price is less than or equal to $100, Price Point = "Low"
+
+PricePoint = IF(AdventureWorks_Products[ProductPrice]>500,
+                "High",IF(AdventureWorks_Products[ProductPrice]>100,"Mid-Range","Low"))
+
+- In the Calendar table, add a new column named "Short Day"
+to extract and capitalize the first three letters from the Day Name column
+
+ShortDay = UPPER(LEFT(AdventureWorks_Calendar[Nome do Dia],3))
+
+- In the Product table, add a column named "SKU Category" to extract
+the first two characters from the ProductSKU field
+
+SKUCategory = LEFT(AdventureWorks_Products[SKUType],2)
+
+BONUS: Modify the SKU Category function to return any number of characters
+up to the first dash (Hint: You may need to "search" long and hard for that dash...)
+
+SKUCategory = LEFT(AdventureWorks_Products[SKUType],
+                   SEARCH("-",AdventureWorks_Products[ProductSKU])-1)
+
+--------------------------------------------------------------------------------------------
+2) In the REPORT view, create the following measures
+(Use a matrix visual to match the "spot check" values provided)
+
+- Create a measure named "Product Models" to calculate the number
+of unique product model names
+Spot check: You should see a total of 119 unique product models
+
+ProductModels = DISTINCTCOUNT(AdventureWorks_Products[ModelName])
+
+- Create a measure named "ALL Returns" to calculate
+the grand total number of returns, regardless of the filter context
+Spot check: You should see a total of 1,809 returns
+
+AllReturns = CALCULATE([TotalReturns],ALL(AdventureWorks_Returns))
+
+- Create a measure to calculate "% of All Returns"
+Spot check: You should see a value of 61.64% for the Accessories product category
+
+% of AllReturns = [TotalReturns] / [AllReturns]
+
+- Create a measure named "Bike Returns" to calculate total returns for bikes specifically
+Spot check: You should see a total of 427 bike returns
+
+BikeReturns = CALCULATE([TotalReturns],
+                        AdventureWorks_Product_Categories[CategoryName]="Bikes")
+
+- Create a measure named "Total Cost", by multiplying
+order quantities by product costs at the row-level
+Spot check: You should see a total cost of $14,456,986.32
+
+TotalCost = SUMX('Sales CSV',
+                 'Sales CSV'[OrderQuantity] * RELATED(AdventureWorks_Products[ProductCost]))
+
+- Once you've calculated Total Cost, create a new measure for "Total Profit",
+defined as the total revenue minus the total cost
+Spot check: You should see a total profit of $10,457,580.86
+
+TotalProfit = [TotalRevenue] - [TotalCost]
+
+- Create a measure to calculate Total Orders for the previous month
+(named "Prev Month Orders")
+Spot check: Create a matrix with "Start of Month" on rows to confirm accuracy
+
+PrevMonthOrders = CALCULATE([TotalUniqueOrders],
+                            DATEADD(AdventureWorks_Calendar[Date],-1,MONTH))
+
+- Create a measure named "Order Target", calculated as a 10% lift over the previous month
+Spot check: Create a matrix with "Start of Month" on rows to confirm accuracy
+
+OrderTarget = [PrevMonthOrders]*1.1
+
+- Total Returns for the previous month (named "Prev Month Returns")
+Spot check: Create a matrix with "Start of Month" on rows to confirm accuracy
+
+PrevMonthReturns = CALCULATE([TotalReturns],
+                             DATEADD(AdventureWorks_Calendar[Date],-1,MONTH))
+
+- 90-Day Rolling Profit (named "90-day Rolling Profit")
+Spot check: You should see a 90-day rolling profit of $2,142,623.27
+
+90DayRollingProfit = CALCULATE([TotalProfit],
+                               DATESINPERIOD(AdventureWorks_Calendar[Date],
+                                             MAX(AdventureWorks_Calendar[Date]),-90,DAY))

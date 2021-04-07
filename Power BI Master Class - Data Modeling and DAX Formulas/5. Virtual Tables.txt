@@ -1,0 +1,41 @@
+-------------------------------------------------------------------------------------------
+CREATING VIRTUAL TABLES
+Report View > Table Tools > New Table
+TABLECustomerSegment = SUMMARIZE(Data,Data[Country],Data[Customer],
+                       "Sales",SUM(Data[Sales]),
+                       "Profit",SUM(Data[Profit]))
+
+-------------------------------------------------------------------------------------------
+CUSTOMER SEGMENTATION AS COLUMNS (NOT VALUES)
+New column in the Data View
+Segment = SWITCH(TRUE(),TABLECustomerSegment[Sales]>1000000,"GOLD",
+                        TABLECustomerSegment[Sales]>500000,"SILVER",
+                        "BRONZE")
+
+New Measure (to view number of customers per segment)
+CustomerCount = DISTINCTCOUNT(TABLECustomerSegment[Customer])
+
+-------------------------------------------------------------------------------------------
+PERFORMANCE ANALYZER
+View > Performance Analyzer
+
+-------------------------------------------------------------------------------------------
+EXERCISE
+TABLEModel = SUMMARIZE(Data,Data[Model],"Total Sales",SUM(Data[Sales]))
+Set the relationship with the Data Table
+
+Create Measures
+Total Profit = CALCULATE(SUM(Data[Profit]))
+Avg Profit = CALCULATE(AVERAGE(Data[Profit]))
+Max Profit = CALCULATE(MAX(Data[Profit]))
+First Sale Date = CALCULATE(MIN(Data[SalesDate]))
+Last Sale Date = CALCULATE(MIN(Data[SalesDate]))
+
+ALTERNATIVE - VIRTUAL TABLE
+TABLECustomerSummary = SUMMARIZE(Data, Data[Customer],
+                                 "Total Sales",SUM(data[Sales]),
+                                 "Total Profit",SUM(data[Profit]),
+                                 "Avg Profit",AVERAGE(Data[Profit]),
+                                 "Highest Profit",MAX(data[Profit]),
+                                 "First Sale Date",MIN(data[SalesDate]),
+                                 "Last Sale Date",MAX(data[SalesDate]))

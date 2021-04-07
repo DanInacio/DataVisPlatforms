@@ -1,0 +1,42 @@
+-------------------------------------------------------------------------------------------
+SUM OPERATION
+TotalSales = SUM(Data[Sales])
+TotalProfit = SUM(Data[Profit])
+
+-------------------------------------------------------------------------------------------
+DIVIDE OPERATION
+ProfitRatio = DIVIDE([TotalProfit],[TotalSales])
+ProfitRatio = [TotalProfit] / [TotalSales]
+AvgProfitPerCustomer = [TotalProfit] / [NumberOfCustomers]
+%SalesTotal = [TotalSales] / [SalesAll]
+
+-------------------------------------------------------------------------------------------
+AVERAGE OPERATION
+AvgProfit = AVERAGE(Data[Profit])
+
+-------------------------------------------------------------------------------------------
+MAX OPERATION
+MaxProfit = MAX(Data[Profit])
+
+-------------------------------------------------------------------------------------------
+MIN OPERATION
+MinProfit = MIN(Data[Profit])
+FirstSaleDate = MIN(Data[SalesDate])
+
+-------------------------------------------------------------------------------------------
+DISTINCTCOUNT
+NumberOfCustomers = DISTINCTCOUNT(Data[Customer])
+
+-------------------------------------------------------------------------------------------
+CALCULATE
+SalesBikes = CALCULATE([TotalSales], Data[Business Segment] = "Bikes")
+Sales2018 = CALCULATE([TotalSales],'Date Master'[Year] = 2018)
+SalesBikes2018 = CALCULATE([TotalSales],
+                           Data[Business Segment] = "Bikes",
+                           'Date Master'[Year] = 2018)
+NumberOfBikeCustomers = CALCULATE([NumberOfCustomers],Data[Business Segment] = "Bikes")
+
+-------------------------------------------------------------------------------------------
+CALCULATE + ALL/ALLEXCEPT
+SalesAll = CALCULATE([TotalSales],ALL(Data))
+SalesAllExceptBusSeg = CALCULATE([TotalSales],ALLEXCEPT(Data,Data[Business Segment]))

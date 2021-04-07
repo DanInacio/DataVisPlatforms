@@ -1,0 +1,21 @@
+IF YOUR COLUMN IS IDENTIFIED AS LOCATIONS
+
+- You will get a world map generated automatically
+- There are a number of geographic roles
+	Area Code
+	Country
+	Region
+	City
+	ZIP Code
+	Latitude/Longitude
+	...
+- You can customize your map view, select "Map" > "Map Layers"
+
+- What if the data is not formatted to be recognized as a location???
+	Answer: Custom Geocoding
+	How? -> Click on the "Unknown" button and edit your data
+
+- To join two maps, right-click on one of the columns and select "Dual Axis"
+
+Note: I did not have a field with locations in my dummy test dataset,
+which is why I resorted to taking notes on mapping.

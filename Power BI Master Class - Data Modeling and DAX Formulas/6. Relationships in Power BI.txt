@@ -1,0 +1,31 @@
+-------------------------------------------------------------------------------------------
+RELATIONSHIPS BETWEEN TABLES
+Load "Master1" and "Workshop" tables from Employee Master File
+
+Make sure relationships are ALWAYS MANY-to-ONE!
+
+-------------------------------------------------------------------------------------------
+RELATIONSHIP CALCULATIONS
+New Columns in Workshop Table (Data View)
+	Employee Name = RELATED(Employee[Employee Name])
+	Department = RELATED(Employee[Dept])
+
+New Columns in Employee Table (Data View)
+	Training Cost = CALCULATE(SUM(Workshop[Cost]))
+	Number of Courses = CALCULATE(COUNT(Workshop[Employee ID]))
+	First Course Date = CALCULATE(MIN(Workshop[Start Date]))
+
+-------------------------------------------------------------------------------------------
+USERELATIONSHIP - What if I want to connect MORE THAN 1 FIELD???
+Load Date Master File and establish relationship between Master Date and Start Date
+MARK AS MASTER DATE TABLE!
+
+I can view a matrix with Year and Month on Rows and Workshop.EmployeeID as Values
+I know how many people started courses and when. But how many finished and when?
+
+Add the 2nd Relationship (it will become inactive!)
+
+NEW MEASURE
+NumberOfEmpByEndDate = CALCULATE(COUNT(Workshop[Employee ID]),
+                                 USERELATIONSHIP(Workshop[End Date],
+                                                 DateMaster[Master Date])

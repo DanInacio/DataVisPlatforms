@@ -1,0 +1,26 @@
+-------------------------------------------------------------------------------------------
+CREATING DATA GROUPS
+Open the Data Project
+Select: Report View > TABLECustomerSegment > Country > Column Tools > Data Groups
+	Name: Region
+	Group: France & Germany & UK (Rename group to Europe)
+	Group: Canada & USA (Rename group to North America)
+	Include Other
+
+Region Data Group has been created!
+
+Select: Report View > TABLECustomerSegment > Sales > Column Tools > Data Groups
+	Name: Sales (Bins)
+	Group Type: Bin
+	Bin Type: Size of Bins
+	Bin Size: 25000, view a column chart, then 200000
+
+Sales Data Group has been created!
+
+Select: Report View > TABLECustomerSegment > Profit > Column Tools > Data Groups
+	Name: Profit (Bins)
+	Group Type: Bin
+	Bin Type: Number of Bins
+	Bin Number: 12
+
+Profit Data Group has been created!

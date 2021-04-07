@@ -1,0 +1,140 @@
+REPORT VIEW
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ADDING SIMPLE OBJECTS TO CANVAS
+Insert > Image
+View > Grid/Block Objects
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+STACKED BAR CHART
+Axis - SubCategoryName
+Values - TotalUniqueOrders
+Description - TotalRevenue_Measure, TotalProfit
+ColourSaturation - TotalRevenue_Measure
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+MATRIX
+Axis - CategoryName, SubCategoryName, ProductName
+Values - TotalUniqueOrders, ReturnRate
+Conditional Formatting - TotalUniqueOrders (data bars),
+                         Return Rate (background color set as white to red)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+SLICER
+Add one for Country
+Add one for Date
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+CARDS, MULTI-CARDS AND KPI VISUALS
+Card - Total Revenue
+Multi-Card - Total Revenue, Total Orders
+KPI Visual - Indicator (TotalRevenue),
+             Trend Axis (StartOfMonth),
+             Target Goals (TargetRevenue / PrevMonthRevenue),
+KPI Visual - Indicator (TotalOrders),
+             Trend Axis (StartOfMonth),
+             Target Goals (PrevMonthOrders),
+KPI Visual - Indicator (TotalReturns),
+             Trend Axis (StartOfMonth),
+             Target Goals (PrevMonthReturns), WARNING - In returns, low is GOOD!
+             	Colour Coding - Low is Good
+             
+To follow KPI Visuals, add a Matrix with the same data for Q&A!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+TEXT CARDS
+Add a Card and Product Name to Axis AND to filters
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+MAPPING GEOSPATIAL DATA
+Map - Location (Country)
+      Size (TotalUniqueOrders)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+TREEMAPS
+Replace your TotalOrders by Category visual with a Treemap
+Revert colours to predefinition
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+SHOWING TRENDS WITH LINE AND AREA CHARTS
+New Tab > "Product Detail"
+
+To showcase profit trending:
+Line - TotalProfit (Values), StartOfWeek (Axis), Title ("Weekly Profit")
+       Data Colors ("Green")
+Area - TotalReturns (Values), StartOfWeek (Axis), Title ("Weekly Return Volume")
+       Data Colors ("Red"), CategoryName (Legend)
+
+You can also replace the Area chart with the Stacked Area chart...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ADDING TREND LINES AND FORECASTS
+Line Chart - Add ToolTips (TotalRevenue, TotalOrders)
+	Trend Line (Add, 75% transparency)
+	Forecast (Add, 6 points, i.e., weeks)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+GOAL PACING WITH GAUGE CHARTS
+
+To view a gauge which also shows monthly performance for current month
+Gauge - TotalOrders (Values), StartOfMonth (Filter > Top N > Top 1 > Latest)
+        OrderTarget (MaxValue)
+Gauge - TotalReturns (Values), StartOfMonth (Filter > Top N > Top 1 > Latest)
+        PrevMonthReturns (MaxValue)
+Gauge - Revenue (Values), StartOfMonth (Filter > Top N > Top 1 > Latest)
+        TargetRevenue (MaxValue)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+EDIT INTERACTIONS
+By default, all charts interact with each other.
+Select the Slicer as the parent visual and you can then
+disable filters to None in other charts
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DRILLTHROUGH FILTERS
+Jump to another page while filtering on the selected item clicked.
+
+Add a Card - ProductName in Values and Filters
+You can now right-click on the product table
+You will be sent to Product Detail tab about that specific product!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+BOOKMARKS
+Saves your window, including all filters
+Add one
+
+Insert a Text Box in Exec Summary Tab and insert a button in it.
+Button > Set Action On > Type: Bookmark > Select yours...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+PRO TIP: TEST WHAT-IF SCENARIOS
+Modelling > New Parameter > "Name: Price Adjustment (%)", Data Type: Decimal Number
+                            Min: -1, Max: 1, Increment: 0.1, Default: 0
+
+New Measure in Product Table:
+AdjustedRetailPrice = [AvgPrice] * (1+'Price Adjustment (%) Value)
+
+MultiRow card to check it is working. Drag AvgPrice and AdjustedRetailPrice and check...
+
+Feed AdjustedPrice onto other charts:
+1. Grab TotalRevenue_Measure, copy and change to create AdjustedRevenue_Measure
+AdjustedRevenue_Measure = SUMX('Sales CSV','Sales CSV'[OrderQuantity] *
+                                           [AdjustedRetailPrice])
+
+2. New Measure:
+AdjustedProfit = [AdjustedRevenue_Measure] - [TotalCost]
+
+3. Copy the Line Chart and view with
+	Adjusted Data on top of original data (no Analytics Lines needed...)
+
+This shows what increasing prices or decreasing results in our profit!!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

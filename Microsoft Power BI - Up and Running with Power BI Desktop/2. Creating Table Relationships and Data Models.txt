@@ -1,0 +1,92 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DATABASE NORMALIZATION - Organizing tables and columns in a
+relational DB to reduce redundancy & preserve data integrity
+- Eliminate redundant data to decrease table sizes and improve speed and efficiency
+- Minimize errors and anomalies from data modifications: Insert, Update, Delete
+- Simplify queries and structure the DB for meaningful analysis
+
+I.e., each table serves ONE purpose (calendar, product, transaction, customers, ...)
+When you don't normalize, rows end up with duplicate info in some columns!!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DATA TABLES VS LOOKUP TABLES
+- Data tables contain quantitative metrics, numbers or values,
+with ID or "key" columns to establish table relationships
+- Lookup tables contain descriptive, often text-based attributes about each table
+
+PRIMARY VS FOREIGN KEYS
+- Foreign keys, because they contain multiple instances of each value (in data tables)
+- Primary keys, because they are uniquely identifying each row (in lookup tables)
+
+DATA TABLE   <-> FOREIGN KEY
+LOOKUP TABLE <-> PRIMARY KEY
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+"SNOWFLAKE" SCHEMAS (Linking keys in a sequence between tables)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+CREATING TABLE RELATIONSHIPS (Click and drag on the common keys)
+1. Drag Calendar > Date Key and drop on Sales > Order Date Key
+2. Drag Territories > Territory Key and drop on Sales > Territory Key
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+MANAGING AND EDITING TABLE RELATIONSHIPS
+3. Swap the Sales relationship with calendar, from order date to stock date
+   a.) Go to "Manage Relationships"
+   b.) Select the relevant columns and select "Ok"
+   c.) Revert to Order Date
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+MANAGING ACTIVE AND INACTIVE RELATIONSHIPS
+You could connect both OrderDate and StockDate to calendar... but ONLY ONE can be ACTIVE!!!
+Dotted line --- = INACTIVE
+
+4. Connect StockDate and Calendar Date and observe this.
+   a.) You can then deactivate one and activate the other, at will...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RELATIONSHIP CARDINALITY
+1-to-Many: 1 Primary Key (from lookup tables) to many foreign keys (from data tables)
+   Example: One unique product (product table) to many sales of that product (sales table)
+   In Power BI: 1 -> *
+
+Many-to-Many: NOT POSSIBLE! One table column must have unique values!
+1-to-1:       INEFFICIENT! Both tables could be merged, since both have unique values!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+CONNECTING MULTIPLE DATA TABLES
+5. Load AdventureWorks_Returns.csv file
+
+NOTES: Returns table needs info on product, customer and calendar data.
+       However, it has no primary key to the customer table!
+
+6. You can't create a link between ReturnsDate and SalesDate (repeat values in reports!!!)
+   a.) Connect the keys you do have (product, territory and calendar)
+
+You need to relate them through shared lookup tables!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+FILTER FLOW (notice the arrows' direction in relationships)
+- Filters do not flow upstream, always in the "many" direction in 1-to-many
+
+TWO-WAY FILTERS (use with CAUTION!)
+- You can edit a relationship and set direction to "Both". Can cause loss of data!!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+HIDING FIELDS FROM REPORTS
+7. In Relationships Tab, you can right-click a table or column and "Hide in report view"
+   a.) Hide, in Sales table and Returns Table, the foreign keys
+      i.)  ProductKey, CustomerKey, OrderDate, StockDate, TerritoryKey
+      ii.) TerritoryKey, ProductKey, ReturnDate
+
+PRO TIP: Hide all foreign key columns in your data tables to
+force users to only use primary keys in lookup tables.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DATA MODELLING BEST PRACTICES
+- Build a normalized model from the start (Each table has a distinct purpose!)
+- Lookup tables above data tables in relationships Tab (visual aid)
+- Avoid Two-Way filters
+- Hide fields from report view to prevent invalid filter context
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,59 @@
+HOMEWORK: Creating Table Relationships & Data Models in Power BI
+Using your Adventure Works Power BI file, complete the following:
+
+--------------------------------------------------------------------------------------------
+1) Navigate to the RELATIONSHIPS view, and perform the following actions: 
+   a.) Right-click to delete each relationship between Sales, Customers and Calendar
+       (including both date fields)
+   b.) Use the Manage Relationships tool to delete all remaining relationships
+       between all tables
+
+--------------------------------------------------------------------------------------------
+2) Recreate all table relationships, and confirm the following:
+   a.) Cardinality is 1-to-Many for all relationships
+   b.) Filters are all One-Way
+   c.) Filter direction correctly flows "downstream" to data tables
+   d.) Data tables are not connected directly to one another
+   e.) Both data tables are connected to all valid lookup tables
+   f.) Product-related tables follow a snowflake schema
+
+--------------------------------------------------------------------------------------------
+3) Return to the REPORT view, and complete the following:
+   a.) Edit (or insert) the matrix visual to show ReturnQuantity (values)
+       by CategoryName (rows) from the Product_Category table
+   b.) Which category saw the highest volume of returns? How many?
+          ACCESSORIES=1130
+   c.) Replace CategoryName with Year from the Calendar table
+   d.) How many returns do you see in 2015 vs. 2016?
+          2015=86; 2016=770
+   e.) Replace Year with FullName from the Customer table
+   f.) What do you see, and why?
+          ALL DATA REPLICATED. No relationship set between customer and returns!!!
+   g.) Update the matrix to show both OrderQuantity and ReturnQuantity (values)
+       by ProductKey (rows) from the Product table
+   h.) What was the total OrderQuantity for Product #338?
+          50
+
+--------------------------------------------------------------------------------------------
+4) Unhide the ProductKey field from the Returns table:
+   a.) In the matrix, replace ProductKey from Product table with
+       ProductKey from the Returns table
+   b.) Why do we see the same repeating values for OrderQuantity?
+          FOREIGN KEY is being used instead of a primary key!!!
+          Flow does not go upstream!!!
+   c.) Edit the relationship between Returns and Product tables
+       to change the cross filter direction from Single to Both
+   d.) Why does the visual now show OrderQuantity values by product,
+       even though we are using ProductKey from Returns?
+          FILTER NOW PASSES from Returns > Product > Sales!!!
+   e.) How many orders do we see now for Product #338? What's going on here?
+          PRODUCT IS NOT SHOWING UP. Product had no returns!!!
+          A filter with no items from Returns > Product > Sales = BLANK!!!
+--------------------------------------------------------------------------------------------
+5) Complete the following:
+   a.) Change filter direction between Returns and Product tables back to single (one-way)
+   b.) Hide the ProductKey field in the Returns table from report view
+       (and any other foreign keys, if necessary)
+   c.) Update the matrix to show ProductKey from the Product table,
+       rather than Returns table
+   d.) Recommendation: Save a separate backup copy of the .pbix file

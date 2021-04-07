@@ -1,0 +1,39 @@
+-------------------------------------------------------------------------------------------
+DATES BETWEEN START AND END
+SalesMay1stHalf = CALCULATE([TotalSales],
+                            DATESBETWEEN(Data[SalesDate],"01/05/2017","15/05/2017"))
+
+-------------------------------------------------------------------------------------------
+ROLLING CALENDAR
+SalesRolling7Day = CALCULATE([TotalSales],DATESINPERIOD(Data[SalesDate],TODAY(),-7,DAY))
+RollingUntilLastAvailableDate = CALCULATE([TotalSales],
+                                          DATESINPERIOD(Data[SalesDate],
+                                                        LASTDATE(Data[SalesDate]),-7,DAY))
+-------------------------------------------------------------------------------------------
+MARK AS DATE TABLE (select this under Table Tools in Report View!!!)
+
+-------------------------------------------------------------------------------------------
+PREVIOUSMONTH
+PrevMonth = CALCULATE([TotalSales],PREVIOUSMONTH('Date Master'[Master Date])
+
+-------------------------------------------------------------------------------------------
+DIFFERENCE FROM PREVIOUS MONTH
+DiffFromPreviousMonth = [TotalSales] - [PrevMonth]
+
+-------------------------------------------------------------------------------------------
+PREVIOUSYEAR
+PrevYearSales = CALCULATE([TotalSales],PREVIOUSYEAR('Date Master'[Master Date]))
+
+-------------------------------------------------------------------------------------------
+SAMEPERIODLASTYEAR (also breaks year value into smaller timeframes!)
+PrevYearSales = CALCULATE([TotalSales],SAMEPERIODLASTYEAR('Date Master'[Master Date]))
+
+-------------------------------------------------------------------------------------------
+TOTALYTD
+TotalYTD = TOTALYTD([TotalSales],'Date Master'[Master Date])
+
+TOTALQTD
+TotalQTD = TOTALQTD([TotalSales],'Date Master'[Master Date])
+
+TOTALMTD
+TotalMTD = TOTALMTD([TotalSales],'Date Master'[Master Date])

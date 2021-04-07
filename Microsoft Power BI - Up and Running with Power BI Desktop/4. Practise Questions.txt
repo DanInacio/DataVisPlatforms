@@ -1,0 +1,97 @@
+HOMEWORK: Visualizing Data with Power BI Reports
+Using the Adventure Works report, complete the following:
+
+--------------------------------------------------------------------------------------------
+1) Add a new report page named "Customer Detail" and complete the following steps:
+
+- Add a matrix visual to show Total Orders and Total Revenue
+by customer full name for the top 100 customers by revenue (top N by Revenue Filter!)
+
+- What happens when you try to pull in Total Returns as well? Why?
+
+- Sort the matrix by TotalRevenue (descending) to show the top revenue-generating customers
+Spot check: You should see Mr. Maurice Shan as the top customer,
+with $12,407.96 in Total Revenue
+
+- Add conditional formatting to show data bars
+on the TotalOrders column and a background color scale
+on the Total Revenue column, and customize the style however you'd like
+
+--------------------------------------------------------------------------------------------
+2) Add a Donut Chart to show Total Orders by Gender (on the Legend):
+
+- Title the chart "Orders by Gender", and adjust formatting to match
+the gauge charts on the Customer Detail tab (centered, gray background, light gray font)
+
+- Copy the chart and paste two more versions:
+one to visualize orders by IncomeLevel,
+and a second to visualize orders by Occupation
+(remember to update the chart titles!)
+
+- Update the report interactions so that each donut chart
+(as well as the matrix) filters the other two donuts, instead of highlighting
+Spot check: If you select "Mr. Maurice Shan" from the matrix visual,
+you should see the charts filter to only show
+Gender = M, Income Level = Average, and Occupation = Professional
+
+- Hold CTRL to select all three donuts, and use the formatting tools
+to align the top of each chart and distribute horizontally
+
+--------------------------------------------------------------------------------------------
+3) Add a Line & Clustered Column chart to show
+TotalOrders (as columns) and TotalRevenue (as a line),
+with Start of Month on the shared X-axis:
+
+- Update the chart title to "Orders & Revenue by Month",
+and format the chart style however you choose
+Spot check: You should see that "Mr. Marco Lopez" drove the most orders (3) in June 2017
+
+- Select the matrix, and update the report interaction mode
+to filter the combo chart (vs. highlighting)
+Spot check: You should see that "Mr. Marco Lopez" placed orders
+in June 2016, August 2016, March 2017 and June 2017
+
+--------------------------------------------------------------------------------------------
+4) Add a Treemap visual to show Total Orders (values) grouped by Current Age:
+
+- Update the chart title to "Orders by Age", and format the chart style however you choose
+
+- Select the matrix, and update the report interaction mode
+to filter the treemap (vs. highlighting)
+Spot check: Ages will change over time since they are based on
+the TODAY() function, but you should see the most orders for age 50 and 49
+
+--------------------------------------------------------------------------------------------
+5) Add a card to show FullName, and make the following updates:
+
+- Turn off the Category Label, update the card title to "Top Customer",
+and adjust formatting to match the donut charts
+
+- Format with a light yellow background fill
+(to match the product cards on the exec summary page)
+
+- Add a Top N visual-level filter to show the #1 customer based on Total Revenue
+Spot check: You should see "Mr Maurice Shan" when the view is unfiltered,
+and "Mrs. Janet Munoz" when filtering on Female customers only
+
+- Copy and paste to create two new cards:
+one showing Total Orders, and the other showing Total Revenue,
+and update card titles to "Customer Orders" and "Customer Revenue", respectively
+Spot check: Among high income customers, you should see
+"Mrs. Lisa Cai" as the top customer, with 7 orders and $11.33K in revenue
+
+--------------------------------------------------------------------------------------------
+6) Add a text box that says "Executive Summary", and insert an arrow button next to it:
+
+- Return to the "Exec Summary" page, activate the bookmark tab,
+and add a bookmark named "Exec Summary"
+(View - Bookmarks Pane - Add)
+
+- Return to the "Customer Detail" page, and link the arrow button
+to the bookmark you just created using the object "Action" properties
+Spot check: CTRL-click the arrow to confirm that the link works as expected  
+
+--------------------------------------------------------------------------------------------
+7) Make any formatting tweaks you see fit
+(alignment, chart styles, separation lines, etc),
+and save a (completed!) copy of the report

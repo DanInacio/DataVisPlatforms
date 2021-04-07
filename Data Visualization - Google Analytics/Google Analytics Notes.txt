@@ -1,0 +1,75 @@
+HOW TO SETUP GOOGLE ANALYTICS
+1. Go to www.google.com/analytics to create an Analytics account for your website
+2. Install the Tracking Code on your website
+   a.) or copy the gtag and paste it in the HTML code after <head>
+3. Go Incognito and access your website. Confirm Analytics tracks 1 user in your page
+
+HOW TO ADD REPORTING VIEWS TO BACKUP YOUR DATA
+1. Go to Admin and create a new view
+
+HOW TO FILTER TO GET CLEAN DATA
+1. Go to Admin and All Filters
+2. Search "what's my IP" in Google if you want to block your own IP!!!
+
+HOW TO SETUP GOALS
+1. Go to Admin and Goals
+
+HOW TO SETUP ECOMMERCE TRACKING
+1. Go to Admin and E-Commerce Setup
+https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce
+
+CAMPAIGN URL BUILDER
+Required to setup a campaign source/medium
+
+HOW TO ADD SEGMENTS TO YOUR REPORTS
+1. Go to Demographics and apply your segments
+
+HOW TO SETUP CUSTOM REPORTS
+1. Go to Customisation
+https://neilpatel.com/blog/expert-google-analytics-reports/
+
+HOW TO SETUP ALERTS FOR SPIKES/DROPS
+1. Go to Admin and Alerts
+
+HOW TO REMOVE SPAM TRAFFIC
+Referrals report can show you high values of traffic, without interacting with your website
+
+1. Go to Admin and Add Filter Custom
+   a.) Filter Field - Campaign Source (add name of site)
+   b.) Verify the filter to confirm
+
+HOW TO ADD SOMEONE AS ADMIN TO GOOGLE ANALYTICS
+1. Go to Admin and, under View, Select User Management
+
+HOW TO USE BENCHMARKING REPORTS TO COMPARE TO INDUSTRY PEERS
+1. Go to Admin, Account Settings and enable Benchmarking
+2. View Benchmarking reports
+
+HOW TO LINK GOOGLE ADS TO GOOGLE ANALYTICS
+1. Setup a Google Ads Account
+2. Go to Admin and Google Ads Linking
+3. View Google Ads Reports, under Acquisition
+
+4. Go to Admin and Audience Definitions
+5. Setup target audience for ads
+
+HOW TO SETUP CUSTOM DASHBOARDS
+1. Go to Customization, Dashboards
+https://analytics.google.com/analytics/gallery/#landing/start/
+
+HOW TO SETUP EVENT TRACKING (tracks user actions Google Analytics cannot track)
+For example, to:
+	1.Track click-to-call phone numbers
+	2.External link clicks, third-party live chat
+	3.Clicks on email addresses
+	4.Video plays
+	5.Podcast plays
+	6.Selected colour or size
+	7.Abandonment of form field
+	8.Movement of mouse
+	9.Scrolling down the page
+	10.Clicks to social profiles
+
+1. Go to Behaviour, Events Report
+
+ANALYTICS INTELLIGENCE

@@ -1,0 +1,8 @@
+IF YOUR COLUMN IS IDENTIFIED AS A DATE
+
+- You will get a hierarchy (Year > Quarter > Month > Day), same as Power BI
+- You can transform a date column from Discrete to Continuous (right-click)
+
+
+Note: I did not have a field with dates in my test dataset,
+but the information was on a very introductory level. Nothing really new.
